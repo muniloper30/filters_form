@@ -1,5 +1,5 @@
 <?php
-
+//Parámetros de conexión a la base de datos.
 $host = "localhost";
 $user = "root";
 $pass = "";
@@ -30,7 +30,5 @@ if (file_exists($archivoSQL)) {
 //} else {
  //   echo "Error al ejecutar las sentencias SQL: " . $conexion->error;
 // }
-
-
 
 ?>

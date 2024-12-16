@@ -4,7 +4,7 @@ require('includes/conexion.php');
 //Función para mostrar todos los artículos
 function mostrarArticulos($conexion)
 {
-    //Consulta para obtener todos los artículos
+    //Consulta para obtener todos los artículos de la base de datos
     $sql = "SELECT 
     a.id AS articulo_id, 
     a.nombre AS articulo_nombre, 
@@ -62,13 +62,11 @@ JOIN categorias c ON a.id_categoria = c.id";
     }
 }
 
-
+// Función para obtener los artículos según los filtros seleccionados(se pueden usar todos los filtros o seleccionar solo los que se deseen.)
 function buscarArticulosConFiltros($conexion)
 {
 
-    
-
-    // Recoger los valores del formulario
+    // Obtener los valores del formulario
     $categoria = isset($_POST['categoria']) ? $_POST['categoria'] : '';
     $precioDesde = isset($_POST['precioDesde']) ? $_POST['precioDesde'] : '';
     $precioHasta = isset($_POST['precioHasta']) ? $_POST['precioHasta'] : '';
@@ -83,7 +81,6 @@ if (empty($categoria) && empty($precioDesde) && empty($precioHasta) && empty($fe
     return;
 }
 
-
     // Iniciar la consulta SQL
     $sql = "SELECT 
         a.id AS articulo_id,
@@ -96,8 +93,7 @@ if (empty($categoria) && empty($precioDesde) && empty($precioHasta) && empty($fe
             FROM articulos a
             JOIN categorias c ON a.id_categoria = c.id";
 
-    // Agregar condiciones a la consulta si se establecen filtros
-
+    // Agregar condiciones a la consulta para establecer filtros en la búsqueda deseados
     if ($nombre != '') {
         // Si hay un valor en el campo 'nombre', buscar por nombre (con LIKE para búsqueda parcial)
         $nombre = $conexion->real_escape_string($nombre); // Prevenir inyecciones SQL
@@ -105,26 +101,23 @@ if (empty($categoria) && empty($precioDesde) && empty($precioHasta) && empty($fe
     }
 
     if ($categoria != '' && $categoria != '0') {
-        $sql .= " AND c.nombre = '$categoria'";
+        $sql .= " AND c.nombre = '$categoria'"; //Búsqueda por categoría
     }
     if ($precioDesde != '') {
-        $sql .= " AND a.precio >= '$precioDesde'";
+        $sql .= " AND a.precio >= '$precioDesde'"; //Búsqueda por rango de precio mínimo
     }
     if ($precioHasta != '') {
-        $sql .= " AND a.precio <= '$precioHasta'";
+        $sql .= " AND a.precio <= '$precioHasta'"; //Búsqueda por rango de precio máximo
     }
     if ($fechaDesde != '') {
-        $sql .= " AND a.fecha_publicacion >= '$fechaDesde'";
+        $sql .= " AND a.fecha_publicacion >= '$fechaDesde'"; //Búsqueda por rango de fecha desde
     }
     if ($fechaHasta != '') {
-        $sql .= " AND a.fecha_publicacion <= '$fechaHasta'";
+        $sql .= " AND a.fecha_publicacion <= '$fechaHasta'"; //Búsqueda por rango de fecha hasta
     }
 
     // Ejecutar la consulta
     $resultado = $conexion->query($sql);
-
-
-
 
     // Comprobar si se han encontrado resultados
     if ($resultado && $resultado->num_rows > 0) {
@@ -137,6 +130,7 @@ if (empty($categoria) && empty($precioDesde) && empty($precioHasta) && empty($fe
               <th>Categoria</th>
               <th>Fecha de publicación</th>
               <th>Precio</th></tr>";
+              //Recuperar y colocar los resultados según los filtros
         while ($row = $resultado->fetch_assoc()) {
             echo "<tr>
             <td>" . $row['articulo_id'] . "</td>

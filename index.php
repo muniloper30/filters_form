@@ -4,7 +4,6 @@ require('includes/funciones.php');
 
 $mostrar_articulos = false;
 
-
 // Verificar si el botón "Mostrar todos" fue presionado
 if (isset($_POST['mostrar_todos'])) {
     $mostrar_articulos = true; // Activamos la bandera para mostrar los artículos
@@ -15,8 +14,6 @@ if (isset($_POST['limpiar'])) {
     $mostrar_articulos = false; // Desactivamos la bandera para limpiar la lista
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -94,14 +91,14 @@ if (isset($_POST['limpiar'])) {
                 <button type="submit" name="mostrar_todos" class="btn btn-primary">Mostrar todos</button>
             </div>
         </form>
-
+             <!-- Todos los resultados se mostrarán aquí -->
         <h3 class="text-light mt-4">Resultados</h3>
         <div id="resultados" class="bg-dark p-4 border rounded shadow-lg">
             <?php
             if ($mostrar_articulos === true) {
-                mostrarArticulos($conexion); // Mostrar todos los articulos
+                mostrarArticulos($conexion); // Mostrar todos los articulos de la base de datos.
             } elseif (isset($_POST['buscar'])) {
-                buscarArticulosConFiltros($conexion);
+                buscarArticulosConFiltros($conexion); //Mostrar articulos según filtros.
             }
             ?>
         </div>
